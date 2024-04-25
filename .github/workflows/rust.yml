@@ -44,7 +44,7 @@ jobs:
     
     - name: Compile for Windows x86_64
       shell: powershell
-      run: cargo build --release --target ${{ matrix.platform.target }}
+      run: cargo build --no-default-features --features cursive/crossterm-backend --release --target ${{ matrix.platform.target }}
       if: ${{ contains(matrix.platform.os, 'windows') }}
 
     - name: Publish artifacts
