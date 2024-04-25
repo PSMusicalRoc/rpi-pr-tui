@@ -46,7 +46,7 @@ jobs:
       if: ${{ contains(matrix.platform.os, 'windows') }}
 
     - name: Publish artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: rpi_pr-${{ matrix.platform.name }}
-        path: rpi_pr*
+        path: target/release/rpi_pr*
