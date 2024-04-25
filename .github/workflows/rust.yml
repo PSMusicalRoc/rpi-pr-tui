@@ -1,22 +1,29 @@
-name: Rust
+name: master-push
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
     branches: [ "master" ]
 
 env:
   CARGO_TERM_COLOR: always
 
+permissions:
+  contents: write
+
 jobs:
   build:
 
-    runs-on: stable-x86_64-unknown-linux-gnu
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --verbose --release
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test --verbose --release
+
+    - name: Upload plugin
+      uses: actions/upload-artifact@v2
+      with:
+        name: executable
+        path: ./target/release/rpi_pr
