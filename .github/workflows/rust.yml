@@ -45,11 +45,8 @@ jobs:
       run: cargo build --release --target ${{ matrix.platform.target }}
       if: ${{ contains(matrix.platform.os, 'windows') }}
 
-    - name: CWD BRUH
-      run: pwd
-
     - name: Publish artifacts
       uses: actions/upload-artifact@v4
       with:
         name: rpi_pr-${{ matrix.platform.name }}
-        path: target/release/rpi_pr*
+        path: ./target/release/rpi_pr*
