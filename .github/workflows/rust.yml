@@ -44,6 +44,11 @@ jobs:
       shell: powershell
       run: cargo build --release --target ${{ matrix.platform.target }}
       if: ${{ contains(matrix.platform.os, 'windows') }}
+    
+    - name: DAHHH
+      shell: bash
+      if: ${{ !contains(matrix.platform.os, 'windows') }}
+      run: cd target/release; ls;
 
     - name: Publish artifacts
       uses: actions/upload-artifact@v4
