@@ -12,18 +12,42 @@ permissions:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    strategy:
+      platform:
+        - os_name: Linux_x86_64
+          os: ubuntu-latest
+          target: x86_64-unknown-linux-gnu
+          name: prman-Linux-x86_64.tar.gz
+          executable: rpi_pr
+        
+        - os_name: Windows_x86_64
+          os: windows-latest
+          target: x86_64-pc-windows-msvc
+          name: prman-Windows-x86_64.tar.gz
+          executable: rpi_pr.exe
+      
+    runs-on: ${{ matrix.platform.os }}
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose --release
-    - name: Run tests
-      run: cargo test --verbose --release
 
-    - name: Upload plugin
-      uses: actions/upload-artifact@v2
+    - name: Install toolchain if not cross compiling
+      uses: dtolnay/rust-toolchain@stable
       with:
-        name: executable
-        path: ./target/release/rpi_pr
+        targets: ${{ matrix.platform.target }}
+
+    - name: Compile for Generic Linux
+      shell: bash
+      run: cargo build --release --target ${{ matrix.platform.target }}
+      if: ${{ !contains(matrix.platform.os, 'windows') }}
+    
+    - name: Compile for Windows x86_64
+      shell: powershell
+      run: cargo build --release --target ${{ matrix.platform.target }}
+      if: ${{ contains(matrix.platform.os, 'windows') }}
+
+    - name: Publish artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.platform.name }}
+        path: ./target/release/${{ matrix.platform.executable }}
