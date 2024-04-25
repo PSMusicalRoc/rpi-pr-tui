@@ -19,13 +19,11 @@ jobs:
             os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             name: prman-Linux-x86_64.tar.gz
-            executable: rpi_pr
           
           - os_name: Windows_x86_64
             os: windows-latest
             target: x86_64-pc-windows-msvc
             name: prman-Windows-x86_64.tar.gz
-            executable: rpi_pr.exe
       
     runs-on: ${{ matrix.platform.os }}
 
@@ -50,5 +48,5 @@ jobs:
     - name: Publish artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.platform.name }}
-        path: ./target/release/${{ matrix.platform.executable }}
+        name: rpi_pr-${{ matrix.platform.name }}
+        path: rpi_pr*
