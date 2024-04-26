@@ -2,11 +2,12 @@ mod pr_file_format;
 mod cursive_methods;
 mod globals;
 
+use cursive_methods::*;
 use pr_file_format::PRSeason;
 use globals::PR_SEASON;
 
 use cursive::{
-    traits::*, views::{Dialog, ListView, SelectView, TextView}, Cursive
+    traits::*, views::{Dialog, ListView, Panel, SelectView, TextView}, Cursive
 };
 
 fn update_main_menu_loaded_season(ui: &mut Cursive) {
@@ -27,7 +28,10 @@ fn main_menu_options_loaded_season(ui: &mut Cursive) {
         mm.set_on_submit(|s: &mut Cursive, val: &str| {
             match val {
                 "Get Bracket from Start.GG" => {},
-                "Alter Player Information" => {},
+                "Alter Player Information" => {
+                    s.add_layer(create_alter_player_list());
+                    update_player_list(s);
+                },
                 "Alter Bracket Information" => {},
                 "View Standings" => {},
                 "Save Season" => {},
@@ -105,7 +109,7 @@ fn main() {
     
     let main_menu_selector: SelectView<String> = SelectView::new().h_align(cursive::align::HAlign::Center);
 
-    let main_menu_selector = main_menu_selector.with_name("Main Menu List");
+    let main_menu_selector = Panel::new(main_menu_selector.with_name("Main Menu List"));
     let main_menu = main_menu.child("", main_menu_selector).with_name("Main Menu");
 
     let mut ui = cursive::default();

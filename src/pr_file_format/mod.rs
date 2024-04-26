@@ -81,6 +81,10 @@ impl PRSeason {
         self.num_brackets
     }
 
+    pub fn get_player_vector(&self) -> &Vec<Player> {
+        &self.players
+    }
+
     fn check_representation(&mut self) -> Result<(), String> {
         // Ensure that all players have the same number of placements as
         // there are brackets in the season.

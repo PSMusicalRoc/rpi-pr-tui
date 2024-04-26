@@ -42,4 +42,31 @@ impl Player {
     pub fn get_tag(&self) -> String {
         self.tag.clone()
     }
+
+    pub fn get_start_gg_id(&self) -> i32 {
+        self.id
+    }
+
+    pub fn get_placements(&self) -> &Vec<u32> {
+        &self.placements
+    }
+
+    /* SETTERS */
+
+    pub fn set_start_gg_id(&mut self, id: i32) {
+        self.id = id;
+    }
+
+    pub fn set_tag(&mut self, tag: String) {
+        self.tag = tag;
+    }
+
+    pub fn set_placement(&mut self, bracket_number: usize, placement: u32) -> Result<(), String> {
+        if bracket_number >= self.placements.len() {
+            return Err(format!("Bracket number {} is out of range!", bracket_number));
+        }
+        self.placements[bracket_number] = placement;
+
+        Ok(())
+    }
 }
