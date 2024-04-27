@@ -1,7 +1,7 @@
 use cursive::{
     traits::*, views::{Dialog, EditView, ListView, NamedView, SelectView, TextView}, Cursive
 };
-use std::{fs::{self, DirEntry}, path::PathBuf, sync::atomic::spin_loop_hint};
+use std::{fs::{self, DirEntry}, path::PathBuf};
 
 use crate::pr_file_format::player::Player;
 use crate::globals::*;

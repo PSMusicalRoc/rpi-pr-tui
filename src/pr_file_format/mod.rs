@@ -12,6 +12,7 @@ pub struct PRSeason {
     players: Vec<Player>
 }
 
+#[allow(dead_code)]
 fn is_placement_possible(placement: u32) -> bool {
     if placement == 1 || placement == 2 {
         return true;
@@ -88,10 +89,12 @@ impl PRSeason {
         Ok(retval)
     }
 
+    #[allow(dead_code)]
     pub fn add_bracket(&mut self, _name: String, _num_entrants: u32) {
         self.num_brackets += 1;
     }
 
+    #[allow(dead_code)]
     pub fn add_player(&mut self, id: i32, tag: String) {
         self.players.push(Player::new(id, tag, self.num_brackets));
         self.players.last_mut().unwrap().change_number_of_brackets(self.num_brackets);
