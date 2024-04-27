@@ -12,6 +12,33 @@ pub struct PRSeason {
     players: Vec<Player>
 }
 
+fn is_placement_possible(placement: u32) -> bool {
+    if placement == 1 || placement == 2 {
+        return true;
+    }
+
+    let mut power: u32 = 4;
+    let mut power_minus_one: u32 = 2;
+    let mut power_minus_two: u32 = 1;
+
+    while power_minus_two < 10_000 {
+        let placement_one: u32 = power - power_minus_one + 1;
+        let placement_two: u32 = power - power_minus_two + 1;
+
+        if placement == placement_one || placement == placement_two {
+            return true;
+        }
+        if placement < placement_two {
+            return false;
+        }
+
+        power *= 2;
+        power_minus_one *= 2;
+        power_minus_two *= 2;
+    }
+    return false;
+}
+
 impl PRSeason {
 
     pub fn new() -> PRSeason {
@@ -21,7 +48,7 @@ impl PRSeason {
         }
     }
 
-    pub fn save_to_file(&mut self, filename: String) -> Result<(), String> {
+    pub fn save_to_file(&mut self, filename: PathBuf) -> Result<(), String> {
 
         self.check_representation().unwrap();
 
@@ -100,4 +127,25 @@ impl PRSeason {
         
         Ok(())
     }
+}
+
+
+#[test]
+fn test_pr_placement_validity() {
+    assert!(is_placement_possible(1));
+    assert!(is_placement_possible(2));
+    assert!(is_placement_possible(3));
+    assert!(is_placement_possible(4));
+    assert!(is_placement_possible(5));
+    assert!(!is_placement_possible(6));
+    assert!(is_placement_possible(7));
+    assert!(!is_placement_possible(8));
+
+
+    // larger values
+    assert!(is_placement_possible(33));
+    assert!(is_placement_possible(65));
+    assert!(!is_placement_possible(4095));
+    assert!(is_placement_possible(4097));
+    assert!(!is_placement_possible(4098));
 }

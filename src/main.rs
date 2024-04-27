@@ -2,6 +2,8 @@ mod pr_file_format;
 mod cursive_methods;
 mod globals;
 
+use std::path::PathBuf;
+
 use cursive_methods::*;
 use pr_file_format::PRSeason;
 use globals::PR_SEASON;
@@ -34,9 +36,14 @@ fn main_menu_options_loaded_season(ui: &mut Cursive) {
                 },
                 "Alter Bracket Information" => {},
                 "View Standings" => {},
-                "Save Season" => {},
-                "Save and Close Season" => {},
-                "Close Season without Saving" => {
+                "Save Season" => {
+                    s.add_layer(create_save_file_menu(|_s: &mut Cursive, val: PathBuf| {
+                        let mut season = PR_SEASON.lock().unwrap();
+                        season.save_to_file(val.clone()).unwrap();
+                        drop(season);
+                    }));
+                },
+                "Close Season" => {
                     s.add_layer(Dialog::new()
                         .button("Cancel", |s| { s.pop_layer(); })
                         .button("Yes", |s| {
@@ -47,7 +54,7 @@ fn main_menu_options_loaded_season(ui: &mut Cursive) {
                             main_menu_options_no_season(s);
                             s.pop_layer();
                         })
-                        .content(TextView::new("Are you sure you want to close without saving?"))
+                        .content(TextView::new("Are you sure you want to close?\nYou will lose any unsaved progress!"))
                         .title("Are you sure?")
                     );
                 },
@@ -57,7 +64,7 @@ fn main_menu_options_loaded_season(ui: &mut Cursive) {
 
         mm.add_all_str(
             vec!["Get Bracket from Start.GG", "Alter Player Information", "Alter Bracket Information",
-            "View Standings", "Save Season", "Save and Close Season", "Close Season without Saving"]
+            "View Standings", "Save Season", "Close Season"]
         );
     });
 }
